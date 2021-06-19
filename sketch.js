@@ -1,7 +1,7 @@
 var player;
-var score = 0 , highscore = 0;
+var score = 0,
 var gameState, START, PLAY, END;
-var redBlocksGroup, greenBlocksGroup,blueBlocksGroup, purpleBlocksGroup;
+var redBlocksGroup, greenBlocksGroup, blueBlocksGroup, purpleBlocksGroup;
 
 function setup() {
   createCanvas(500, 500);
@@ -19,44 +19,47 @@ function setup() {
   blueBlocksGroup = new Group();
   purpleBlocksGroup = new Group();
 
-   startButton = createButton("START");
-   startButton.position(width / 2 - 25, height / 2);
-   startButton.mousePressed(()=>{
-     gameState = PLAY;
-     startButton.hide();
-    })
-   
-   resetButton = createButton("RESET");
-   resetButton.position(width / 2 - 25, 10);
-   resetButton.hide();
- 
-  
+  startButton = createButton("START");
+  startButton.position(width / 2 - 25, height / 2);
+  startButton.mousePressed(() => {
+    gameState = PLAY;
+    startButton.hide();
+  });
+
+  resetButton = createButton("RESET");
+  resetButton.position(width / 2 - 25, 10);
+  resetButton.hide();
 }
-
-
 
 function draw() {
   background(0);
 
-  
   if (gameState === PLAY) {
     play();
     scoreChanging();
   }
 
-  if(player.isTouching(redBlocksGroup) || player.isTouching(purpleBlocksGroup)){
+  if (score < 0 || score === 20) {
     gameState = END;
   }
 
   if (gameState === END) {
-    resetButton.show();
-    resetButton.mousePressed(reset);
     
+    fill("white");
+    text("YOU WIN!!",200,250)
+    resetButton.show();
+    resetButton.mousePressed (function(){
+      
+      gameState = PLAY;
+      redBlocksGroup.destroyEach();
+      greenBlocksGroup.destroyEach();
+      player.velocityX = 0;
+    }
+    ) 
   }
 
   console.log(gameState);
   drawSprites();
 
   textScores();
-
 }
